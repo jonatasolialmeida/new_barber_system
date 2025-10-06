@@ -1,0 +1,31 @@
+# Django and DRF
+Django>=5.2,<6.0
+djangorestframework>=3.15.0
+djangorestframework-simplejwt>=5.3.1
+
+# Database
+psycopg2-binary>=2.9.9
+
+# CORS
+django-cors-headers>=4.3.1
+
+# Environment variables
+python-decouple>=3.8
+
+# WSGI Server (production)
+gunicorn>=21.2.0
+
+# Async tasks (preparação futura)
+celery>=5.3.4
+redis>=5.0.1
+
+# Notifications (preparação futura)
+django-celery-beat>=2.5.0
+
+# Utils
+python-dateutil>=2.8.2
+pytz>=2024.1
+Pillow>=10.0.0
+
+# Development
+django-extensions>=3.2.3

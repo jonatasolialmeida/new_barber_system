@@ -1,0 +1,116 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: barber_postgres_hml
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-barber_db_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-barber_user_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-barber_password_hml}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_hml:/var/lib/postgresql/data
+    networks:
+      - barber_network_hml
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: barber_pgadmin_hml
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@barber.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin123}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5051:80"
+    volumes:
+      - pgadmin_data_hml:/var/lib/pgadmin
+    networks:
+      - barber_network_hml
+    depends_on:
+      - postgres
+
+  redis:
+    image: redis:7-alpine
+    container_name: barber_redis_hml
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data_hml:/data
+    networks:
+      - barber_network_hml
+
+  backend:
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile
+    container_name: barber_backend_hml
+    restart: unless-stopped
+    command: gunicorn barber_project.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    environment:
+      DEBUG: "False"
+      SECRET_KEY: ${SECRET_KEY:-change-this-secret-key-in-production}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,backend}
+      DB_ENGINE: django.db.backends.postgresql
+      DB_NAME: ${DB_NAME:-barber_db_hml}
+      DB_USER: ${DB_USER:-barber_user_hml}
+      DB_PASSWORD: ${DB_PASSWORD:-barber_password_hml}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3001}
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    ports:
+      - "8001:8000"
+    volumes:
+      - ../../backend:/app
+      - static_files_hml:/app/staticfiles
+      - media_files_hml:/app/mediafiles
+    networks:
+      - barber_network_hml
+    depends_on:
+      - postgres
+      - redis
+
+  frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    container_name: barber_frontend_hml
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8001/api}
+    ports:
+      - "3001:3000"
+    networks:
+      - barber_network_hml
+    depends_on:
+      - backend
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: barber_portainer_hml
+    restart: unless-stopped
+    ports:
+      - "9001:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data_hml:/data
+    networks:
+      - barber_network_hml
+
+volumes:
+  postgres_data_hml:
+  pgadmin_data_hml:
+  redis_data_hml:
+  static_files_hml:
+  media_files_hml:
+  portainer_data_hml:
+
+networks:
+  barber_network_hml:
+    driver: bridge
