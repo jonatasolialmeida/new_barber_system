@@ -16,6 +16,12 @@ services:
       - ./backups:/backups
     networks:
       - barber_network_prod
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -45,6 +51,12 @@ services:
       - redis_data_prod:/data
     networks:
       - barber_network_prod
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   backend:
     build:
@@ -66,6 +78,8 @@ services:
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
       CELERY_BROKER_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
       CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD}@redis:6379/0
+      REDIS_CACHE_URL: redis://:${REDIS_PASSWORD}@redis:6379/1
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:
       - "8002:8000"
     volumes:
@@ -74,8 +88,16 @@ services:
     networks:
       - barber_network_prod
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/alive/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   celery_worker:
     build:
