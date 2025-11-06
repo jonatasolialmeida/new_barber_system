@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Create logs directory if it doesn't exist
+mkdir -p /app/logs
+
 # Wait for PostgreSQL
 echo "Waiting for PostgreSQL..."
 while ! nc -z $DB_HOST $DB_PORT; do
