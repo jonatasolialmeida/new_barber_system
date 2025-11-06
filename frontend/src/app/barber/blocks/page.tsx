@@ -20,7 +20,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Grid,
+  GridLegacy as Grid,
   FormControlLabel,
   Switch,
   Chip,

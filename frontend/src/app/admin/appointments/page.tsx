@@ -16,7 +16,7 @@ import {
   Chip,
   CircularProgress,
   TextField,
-  Grid,
+  GridLegacy as Grid,
   Button,
   Pagination,
   FormControl,

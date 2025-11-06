@@ -143,7 +143,7 @@ export default function LoginPage() {
             )}
 
             {/* Form */}
-            <form onSubmit={form.handleSubmit(form.onSubmit)}>
+            <form onSubmit={form.onSubmit}>
               <Stack spacing={3}>
                 <FormField
                   name="email"

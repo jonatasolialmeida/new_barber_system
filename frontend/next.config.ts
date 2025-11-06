@@ -31,6 +31,10 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  // Turbopack configuration (Next.js 16+)
+  // Empty config to acknowledge Turbopack as default bundler
+  turbopack: {},
+
   // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],
