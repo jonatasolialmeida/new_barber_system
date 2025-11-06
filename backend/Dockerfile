@@ -10,6 +10,7 @@ WORKDIR /app
 
 # Install system dependencies
 RUN apk add --no-cache \
+    bash \
     postgresql-client \
     gcc \
     musl-dev \

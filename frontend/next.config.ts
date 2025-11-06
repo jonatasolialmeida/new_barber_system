@@ -10,9 +10,6 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
 
-  // SWC minification (faster than Terser)
-  swcMinify: true,
-
   // Compiler options
   compiler: {
     // Remove console logs in production
