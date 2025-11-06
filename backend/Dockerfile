@@ -33,6 +33,9 @@ RUN uv pip install --system -r requirements.txt
 # Copy project
 COPY . /app/
 
+# Create logs directory
+RUN mkdir -p /app/logs
+
 # Run entrypoint script
 RUN chmod +x /app/entrypoint.sh
 
