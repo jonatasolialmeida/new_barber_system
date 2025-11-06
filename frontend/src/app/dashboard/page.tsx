@@ -63,6 +63,8 @@ import {
   ChartSkeleton,
   AppointmentCardSkeleton,
 } from '@/components/SkeletonLoaders';
+import Navbar from '@/components/Navbar';
+import { NoAppointments } from '@/components/EmptyState';
 
 const MotionCard = motion(Card);
 const MotionBox = motion(Box);
@@ -377,8 +379,10 @@ export default function DashboardPage() {
   if (!user) return null;
 
   return (
-    <PageTransition variant="slideUp">
-      <Container maxWidth="xl" sx={{ py: 4 }}>
+    <>
+      <Navbar title="Dashboard" />
+      <PageTransition variant="slideUp">
+        <Container maxWidth="xl" sx={{ py: 4 }}>
         {/* Header com gradiente */}
         <RevealTransition direction="top">
           <Paper
@@ -414,29 +418,13 @@ export default function DashboardPage() {
               }}
             />
 
-            <Box display="flex" justifyContent="space-between" alignItems="center" position="relative">
-              <Box>
-                <Typography variant="h3" fontWeight="bold" gutterBottom>
-                  Olá, {user.first_name}! 👋
-                </Typography>
-                <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                  Bem-vindo ao seu dashboard. Aqui está um resumo das suas atividades.
-                </Typography>
-              </Box>
-              <Button
-                variant="outlined"
-                sx={{
-                  borderColor: 'white',
-                  color: 'white',
-                  '&:hover': {
-                    borderColor: 'white',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  },
-                }}
-                onClick={logout}
-              >
-                Sair
-              </Button>
+            <Box position="relative">
+              <Typography variant="h3" fontWeight="bold" gutterBottom>
+                Olá, {user.first_name}! 👋
+              </Typography>
+              <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                Bem-vindo ao seu dashboard. Aqui está um resumo das suas atividades.
+              </Typography>
             </Box>
           </Paper>
         </RevealTransition>
@@ -709,22 +697,11 @@ export default function DashboardPage() {
               }
             >
               {appointments.length === 0 ? (
-                <Box textAlign="center" py={6}>
-                  <CalendarMonth sx={{ fontSize: 80, color: colors.gray[300], mb: 2 }} />
-                  <Typography variant="h6" color="text.secondary" gutterBottom>
-                    Nenhum agendamento encontrado
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                    Comece agendando seu primeiro horário
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => router.push('/appointments/new')}
-                  >
-                    Fazer Agendamento
-                  </Button>
-                </Box>
+                <NoAppointments
+                  onAction={() => router.push('/appointments/new')}
+                  actionLabel="Fazer Agendamento"
+                  size="medium"
+                />
               ) : (
                 <StaggerTransition>
                   <Grid container spacing={2}>
@@ -784,5 +761,6 @@ export default function DashboardPage() {
         </RevealTransition>
       </Container>
     </PageTransition>
+    </>
   );
 }
