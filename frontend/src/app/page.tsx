@@ -32,6 +32,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { colors } from '@/styles/designTokens';
 import { useRef } from 'react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -131,7 +132,12 @@ export default function LandingPage() {
   };
 
   return (
-    <Box ref={ref} sx={{ overflow: 'hidden' }}>
+    <Box ref={ref} sx={{ overflow: 'hidden', position: 'relative' }}>
+      {/* Theme Toggle */}
+      <Box sx={{ position: 'fixed', top: 16, right: 16, zIndex: 9999 }}>
+        <ThemeToggle size="large" />
+      </Box>
+
       {/* Hero Section com Parallax */}
       <MotionBox
         style={{ opacity, scale }}
