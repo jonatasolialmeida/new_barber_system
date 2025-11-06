@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Container, Box, Typography, Stack, Link as MuiLink, Grid, Alert } from '@mui/material';
+import { Container, Box, Typography, Stack, Link as MuiLink, GridLegacy as Grid, Alert } from '@mui/material';
 import Link from 'next/link';
 import api from '@/services/api';
 import { useForm } from '@/hooks/useForm';
@@ -132,7 +132,7 @@ export default function RegisterPage() {
             )}
 
             {/* Form */}
-            <form onSubmit={form.handleSubmit(form.onSubmit)}>
+            <form onSubmit={form.onSubmit}>
               <Stack spacing={3}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>

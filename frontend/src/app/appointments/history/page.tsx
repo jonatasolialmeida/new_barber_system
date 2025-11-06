@@ -26,7 +26,7 @@ import {
   Tabs,
   Tab,
   TextField,
-  Grid,
+  GridLegacy as Grid,
   Pagination,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';

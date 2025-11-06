@@ -11,7 +11,7 @@ import {
   Alert,
   Paper,
   Link as MuiLink,
-  Grid,
+  GridLegacy as Grid,
   CircularProgress
 } from '@mui/material';
 import Link from 'next/link';

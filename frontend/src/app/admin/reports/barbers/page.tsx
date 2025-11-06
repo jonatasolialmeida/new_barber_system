@@ -18,7 +18,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Grid,
+  GridLegacy as Grid,
   Card,
   CardContent,
 } from '@mui/material';

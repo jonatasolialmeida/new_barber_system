@@ -9,7 +9,7 @@ import {
   TextField,
   Button,
   Paper,
-  Grid,
+  GridLegacy as Grid,
   Alert,
   CircularProgress,
   IconButton,
